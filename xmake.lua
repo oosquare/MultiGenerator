@@ -17,6 +17,13 @@ target("MultiGeneratorDemo")
     add_files("src/main.cpp")
     add_includedirs("src")
     add_deps("MultiGenerator")
+
+target("MultiGeneratorTest")
+    set_kind("binary")
+    add_files("test/Argument_Test.cpp")
+    add_includedirs("src")
+    add_deps("MultiGenerator")
+
 --
 -- If you want to known more usage about xmake, please see https://xmake.io
 --

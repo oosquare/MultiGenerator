@@ -7,12 +7,14 @@
 namespace MultiGenerator {
     /**
      * @brief A simple object to store some configure for a test case.
+     *
      */
     class DataConfig {
     public:
         DataConfig() : config() {}
 
-        DataConfig(const std::unordered_map<std::string, std::string> &config) : config(config) {}
+        DataConfig(const std::unordered_map<std::string, std::string> &config) :
+            config(config) {}
 
         ~DataConfig() {};
 
