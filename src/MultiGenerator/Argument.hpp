@@ -1,3 +1,14 @@
+/**
+ * @file Argument.hpp
+ * @author Justin Chen (ctj12461@163.com)
+ * @brief This file provides a method to describe the structure of test cases and
+ * to be use by executor.
+ * @version 0.1
+ * @date 2022-03-19
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
 #pragma once
 
 #include <string>
@@ -9,7 +20,7 @@
 namespace MultiGenerator {
     /**
      * @brief A abstract class / interface descibing a test case including test
-     * case ID & its config.
+     * case ID & its configure.
      *
      */
     class Argument {

@@ -1,3 +1,14 @@
+/**
+ * @file DataConfig.hpp
+ * @author Justin Chen (ctj12461@163.com)
+ * @brief This file contains DataConfig which provides the ability to save and 
+ * access the arguments (n = ?, m = ?) for each test case easily.
+ * @version 0.1
+ * @date 2022-03-19
+ *
+ * @copyright Copyright (c) 2022
+ *
+ */
 #pragma once
 
 #include <string>
