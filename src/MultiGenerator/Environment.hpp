@@ -32,15 +32,15 @@ namespace MulitGenerator {
     class Environment {
     public:
         /**
-         * @brief Construct a new Environment object. Leave params empty std::shared_ptr
+         * @brief Construct a new Environment object. Leave params empty std::unique_ptr
          * if needing ot keep the streams closed.
          *
-         * @param is std::shared_ptr of a InputStream 
-         * @param os std::shared_ptr of a OutputStream
+         * @param is std::unique_ptr of a InputStream 
+         * @param os std::unique_ptr of a OutputStream
          */
-        Environment(std::shared_ptr<InputStream> is, std::shared_ptr<OutputStream> os) :
-            is(is),
-            os(os) {}
+        Environment(std::unique_ptr<InputStream> is, std::unique_ptr<OutputStream> os) :
+            is(std::move(is)),
+            os(std::move(os)) {}
 
         ~Environment() {}
 
@@ -66,7 +66,7 @@ namespace MulitGenerator {
             return os->getStream();
         }
     private:
-        std::shared_ptr<InputStream> is;
-        std::shared_ptr<OutputStream> os;
+        std::unique_ptr<InputStream> is;
+        std::unique_ptr<OutputStream> os;
     };
 } // namespace MulitGenerator

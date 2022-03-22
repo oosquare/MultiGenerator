@@ -11,8 +11,8 @@ void testEnvironment() {
 
     {
         Environment env(
-            std::make_shared<StandardInputStream>(),
-            std::make_shared<StandardOutputStream>()
+            std::make_unique<StandardInputStream>(),
+            std::make_unique<StandardOutputStream>()
         );
 
         assert(env.hasInputStream() == true);
@@ -27,12 +27,12 @@ void testEnvironment() {
         std::shared_ptr<MulitGenerator::OutputStream> po;
 
         /**
-         * Add () around "std::shared_ptr<MulitGenerator::InputStream>()" to
+         * Add () around "std::unique_ptr<MulitGenerator::InputStream>()" to
          * avoid parse it to a function pointer.
          */
         Environment env(
-            (std::shared_ptr<MulitGenerator::InputStream>()),
-            (std::shared_ptr<MulitGenerator::OutputStream>())
+            (std::unique_ptr<MulitGenerator::InputStream>()),
+            (std::unique_ptr<MulitGenerator::OutputStream>())
         );
 
         assert(env.hasInputStream() == false);
