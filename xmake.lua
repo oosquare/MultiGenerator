@@ -12,12 +12,6 @@ target("MultiGenerator")
     add_headerfiles("src/MultiGenerator.hpp")
     add_headerfiles("src/MultiGenerator/*.hpp")
 
-target("MultiGeneratorDemo")
-    set_kind("binary")
-    add_files("src/main.cpp")
-    add_includedirs("src")
-    add_deps("MultiGenerator")
-
 target("MultiGeneratorTest")
     set_kind("binary")
     add_files("test/Environment_Test.cpp")
