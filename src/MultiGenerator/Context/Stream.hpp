@@ -1,5 +1,5 @@
 /**
- * @file Stream.hpp
+ * @file MultiGenerator/Context/Stream.hpp
  * @author Justin Chen (ctj12461@163.com)
  * @brief This file contains some wrappers of IO streams in C++ standard library.
  * @version 0.1
@@ -16,7 +16,7 @@
 #include <string>
 #include <exception>
 
-namespace MulitGenerator {
+namespace MulitGenerator::Context {
     class FileOpenFailedException : std::exception {
     public:
         const char *what() const noexcept override {
@@ -107,4 +107,4 @@ namespace MulitGenerator {
     private:
         std::ofstream ofs;
     };
-} // namespace MulitGenerator
+} // namespace MulitGenerator::Context

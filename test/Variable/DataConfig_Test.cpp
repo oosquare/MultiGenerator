@@ -1,11 +1,13 @@
 #include <iostream>
 #include <cassert>
 
-#include <MultiGenerator/DataConfig.hpp>
+#include <MultiGenerator/Variable/DataConfig.hpp>
+
+namespace Variable = MultiGenerator::Variable;
 
 int main() {
     {
-        MultiGenerator::DataConfig config;
+        Variable::DataConfig config;
 
         assert(config.insert("one", "1") == true);
         assert(config.insert("two", "2") == true);
@@ -29,7 +31,7 @@ int main() {
     }
 
     {
-        MultiGenerator::DataConfig config({ {"one", "1"}, {"two", "2"}, {"three", "3"} });
+        Variable::DataConfig config({ {"one", "1"}, {"two", "2"}, {"three", "3"} });
         assert(config.get("one").value() == "1");
         assert(config.get("two").value() == "2");
         assert(config.get("three").value() == "3");

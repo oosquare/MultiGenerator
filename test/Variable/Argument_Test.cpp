@@ -1,12 +1,14 @@
 #include <iostream>
 #include <cassert>
 
-#include <MultiGenerator/DataConfig.hpp>
-#include <MultiGenerator/Argument.hpp>
+#include <MultiGenerator/Variable/DataConfig.hpp>
+#include <MultiGenerator/Variable/Argument.hpp>
+
+namespace Variable = MultiGenerator::Variable;
 
 void testNormalArgument() {
-    using MultiGenerator::DataConfig;
-    using MultiGenerator::NormalArgument;
+    using Variable::DataConfig;
+    using Variable::NormalArgument;
 
     {
         NormalArgument arg;
@@ -29,8 +31,8 @@ void testNormalArgument() {
 }
 
 void testSubtaskArgument() {
-    using MultiGenerator::DataConfig;
-    using MultiGenerator::SubtaskArgument;
+    using Variable::DataConfig;
+    using Variable::SubtaskArgument;
 
     {
         SubtaskArgument arg;
@@ -53,9 +55,9 @@ void testSubtaskArgument() {
 }
 
 void testArgument() {
-    using MultiGenerator::Argument;
-    using MultiGenerator::NormalArgument;
-    using MultiGenerator::SubtaskArgument;
+    using Variable::Argument;
+    using Variable::NormalArgument;
+    using Variable::SubtaskArgument;
 
     {
         std::shared_ptr<Argument> ptrA = std::make_shared<NormalArgument>(1);
@@ -66,7 +68,7 @@ void testArgument() {
 }
 
 void testNormalArgumentList() {
-    using MultiGenerator::NormalArgumentList;
+    using Variable::NormalArgumentList;
 
     {
         NormalArgumentList list;
@@ -96,7 +98,7 @@ void testNormalArgumentList() {
 }
 
 void testSubtaskArgumentList() {
-    using MultiGenerator::SubtaskArgumentList;
+    using Variable::SubtaskArgumentList;
 
     {
         SubtaskArgumentList list;
@@ -126,9 +128,9 @@ void testSubtaskArgumentList() {
 }
 
 void testArgumentList() {
-    using MultiGenerator::ArgumentList;
-    using MultiGenerator::NormalArgumentList;
-    using MultiGenerator::SubtaskArgumentList;
+    using Variable::ArgumentList;
+    using Variable::NormalArgumentList;
+    using Variable::SubtaskArgumentList;
 
     {
         std::shared_ptr<ArgumentList> list;

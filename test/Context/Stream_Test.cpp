@@ -4,10 +4,12 @@
 #include <cassert>
 #include <filesystem>
 
-#include <MultiGenerator/Stream.hpp>
+#include <MultiGenerator/Context/Stream.hpp>
+
+namespace Context = MulitGenerator::Context;
 
 void testStandardInputStream() {
-    using MulitGenerator::StandardInputStream;
+    using Context::StandardInputStream;
 
     {
         StandardInputStream is;
@@ -16,7 +18,7 @@ void testStandardInputStream() {
 }
 
 void testFileInputStream() {
-    using MulitGenerator::FileInputStream;
+    using Context::FileInputStream;
 
     {
         {
@@ -39,9 +41,9 @@ void testFileInputStream() {
 }
 
 void testInputStream() {
-    using MulitGenerator::InputStream;
-    using MulitGenerator::StandardInputStream;
-    using MulitGenerator::FileInputStream;
+    using Context::InputStream;
+    using Context::StandardInputStream;
+    using Context::FileInputStream;
     
     {
         {
@@ -69,7 +71,7 @@ void testInputStream() {
 }
 
 void testStandardOutputStream() {
-    using MulitGenerator::StandardOutputStream;
+    using Context::StandardOutputStream;
 
     {
         StandardOutputStream os;
@@ -78,7 +80,7 @@ void testStandardOutputStream() {
 }
 
 void testFileOutputStream() {
-    using MulitGenerator::FileOutputStream;
+    using Context::FileOutputStream;
     
     {
         {
@@ -102,9 +104,9 @@ void testFileOutputStream() {
 }
 
 void testOutputStream() {
-    using MulitGenerator::OutputStream;
-    using MulitGenerator::StandardOutputStream;
-    using MulitGenerator::FileOutputStream;
+    using Context::OutputStream;
+    using Context::StandardOutputStream;
+    using Context::FileOutputStream;
     
     {
         {

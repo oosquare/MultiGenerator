@@ -1,5 +1,5 @@
 /**
- * @file DataConfig.hpp
+ * @file MultiGenerator/Variable/DataConfig.hpp
  * @author Justin Chen (ctj12461@163.com)
  * @brief This file contains DataConfig which provides the ability to save and 
  * access the arguments (n = ?, m = ?) for each test case easily.
@@ -15,7 +15,7 @@
 #include <unordered_map>
 #include <optional>
 
-namespace MultiGenerator {
+namespace MultiGenerator::Variable {
     /**
      * @brief A simple object to store some configure for a test case.
      *
@@ -108,4 +108,4 @@ namespace MultiGenerator {
     private:
         std::unordered_map<std::string, std::string> config;
     };
-} // namespace MultiGenerator
+} // namespace MultiGenerator::Variable

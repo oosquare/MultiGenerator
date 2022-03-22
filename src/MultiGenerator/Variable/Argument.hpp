@@ -1,5 +1,5 @@
 /**
- * @file Argument.hpp
+ * @file MultiGenerator/Variable/Argument.hpp
  * @author Justin Chen (ctj12461@163.com)
  * @brief This file provides a method to describe the structure of test cases and
  * to be use by executor.
@@ -15,9 +15,9 @@
 #include <vector>
 #include <memory>
 
-#include "DataConfig.hpp"
+#include <MultiGenerator/Variable/DataConfig.hpp>
 
-namespace MultiGenerator {
+namespace MultiGenerator::Variable {
     /**
      * @brief A abstract class / interface descibing a test case including test
      * case ID & its configure.
@@ -187,4 +187,4 @@ namespace MultiGenerator {
             args.push_back(std::make_shared<SubtaskArgument>(subtask, id, config));
         }
     };
-} // namespace MultiGenerator
+} // namespace MultiGenerator::Variable

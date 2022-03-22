@@ -1,5 +1,5 @@
 /**
- * @file Environment.hpp
+ * @file MultiGenerator/Context/Environment.hpp
  * @author Justin Chen (ctj12461@163.com)
  * @brief This file contains the class Environment which is used to manage
  * some resources such as IO devices.
@@ -15,9 +15,9 @@
 #include <exception>
 #include <memory>
 
-#include "Stream.hpp"
+#include <MultiGenerator/Context/Stream.hpp>
 
-namespace MulitGenerator {
+namespace MulitGenerator::Context {
     class StreamNotOpenException : public std::exception {
     public:
         const char *what() const noexcept override {
@@ -69,4 +69,4 @@ namespace MulitGenerator {
         std::unique_ptr<InputStream> is;
         std::unique_ptr<OutputStream> os;
     };
-} // namespace MulitGenerator
+} // namespace MulitGenerator::Context

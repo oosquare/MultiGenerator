@@ -1,13 +1,15 @@
 #include <iostream>
 #include <cassert>
 
-#include <MultiGenerator/Stream.hpp>
-#include <MultiGenerator/Environment.hpp>
+#include <MultiGenerator/Context/Stream.hpp>
+#include <MultiGenerator/Context/Environment.hpp>
+
+namespace Context = MulitGenerator::Context;
 
 void testEnvironment() {
-    using MulitGenerator::Environment;
-    using MulitGenerator::StandardInputStream;
-    using MulitGenerator::StandardOutputStream;
+    using Context::Environment;
+    using Context::StandardInputStream;
+    using Context::StandardOutputStream;
 
     {
         Environment env(
@@ -23,16 +25,16 @@ void testEnvironment() {
 
     {
 
-        std::shared_ptr<MulitGenerator::InputStream> pi;
-        std::shared_ptr<MulitGenerator::OutputStream> po;
+        std::shared_ptr<Context::InputStream> pi;
+        std::shared_ptr<Context::OutputStream> po;
 
         /**
-         * Add () around "std::unique_ptr<MulitGenerator::InputStream>()" to
+         * Add () around "std::unique_ptr<Context::InputStream>()" to
          * avoid parse it to a function pointer.
          */
         Environment env(
-            (std::unique_ptr<MulitGenerator::InputStream>()),
-            (std::unique_ptr<MulitGenerator::OutputStream>())
+            (std::unique_ptr<Context::InputStream>()),
+            (std::unique_ptr<Context::OutputStream>())
         );
 
         assert(env.hasInputStream() == false);
