@@ -19,9 +19,16 @@
 namespace MulitGenerator::Context {
     class FileOpenFailedException : std::exception {
     public:
-        const char *what() const noexcept override {
-            return "FileOpenFailedException: Failed to open this file.";
+        FileOpenFailedException(const std::string &fileName) {
+            msg = "FileOpenFailedException: Failed to open file: ";
+            msg += fileName;
         }
+        
+        const char *what() const noexcept override {
+            return msg.c_str();
+        }
+    private:
+        std::string msg;
     };
     
     /**
@@ -52,17 +59,21 @@ namespace MulitGenerator::Context {
     class FileInputStream : public InputStream {
     public:
         FileInputStream(const std::string &fileName) :
-            ifs(fileName) {
-            if (ifs.fail())
-                throw FileOpenFailedException();
-        }
+            fileName(fileName) {}
 
         ~FileInputStream() {}
 
         virtual std::istream &getStream() override {
+            if (!ifs.is_open())
+                ifs.open(fileName);
+
+            if (ifs.fail())
+                throw FileOpenFailedException(fileName);
+            
             return ifs;
         }
     private:
+        std::string fileName;
         std::ifstream ifs;
     };
 
@@ -94,17 +105,21 @@ namespace MulitGenerator::Context {
     class FileOutputStream : public OutputStream {
     public:
         FileOutputStream(const std::string &fileName) :
-            ofs(fileName) {
-            if (ofs.fail())
-                throw FileOpenFailedException();
-        }
+            fileName(fileName) {}
 
         ~FileOutputStream() {}
 
         virtual std::ostream &getStream() override {
+            if (!ofs.is_open())
+                ofs.open(fileName);
+
+            if (ofs.fail())
+                throw FileOpenFailedException(fileName);
+            
             return ofs;
         }
     private:
+        std::string fileName;
         std::ofstream ofs;
     };
 } // namespace MulitGenerator::Context
