@@ -1,5 +1,5 @@
 /**
- * @file Callable.hpp
+ * @file MultiGenerator/Workflow/Callable.hpp
  * @author Justin Chen (ctj12461@163.com)
  * @brief This file declares the common interface of all callable objects.
  * @version 0.1
