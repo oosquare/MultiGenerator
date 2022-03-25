@@ -11,14 +11,12 @@
 #pragma once
 
 #include <thread>
-#include <mutex>
-#include <condition_variable>
 #include <atomic>
 #include <vector>
-#include <queue>
 #include <memory>
 
 #include <MultiGenerator/Workflow/Runner.hpp>
+#include <MultiGenerator/Executor/Channel.hpp>
 
 namespace MultiGenerator::Executor {
     using MultiGenerator::Workflow::Runner;
@@ -29,22 +27,15 @@ namespace MultiGenerator::Executor {
      *
      */
     struct ThreadPoolStatus {
-        std::mutex poolLock;
-        std::condition_variable condVar;
-
-        std::atomic_bool isStopped;
         std::atomic_int runningWorkerCount;
-        int maxWorkerCount;
-        std::queue<std::shared_ptr<Runner>> runnerQueue;
+        Sender<std::shared_ptr<Runner>> runnerSender;
+        Receiver<std::shared_ptr<Runner>> runnerReceiver;
 
         ThreadPoolStatus() :
-            isStopped(true),
-            runningWorkerCount(0),
-            maxWorkerCount(0) {}
-
-        void setMaxWorkerCount(int maxWorkerCount) {
-            isStopped = (maxWorkerCount == 0);
-            this->maxWorkerCount = maxWorkerCount;
+            runningWorkerCount(0) {
+            auto channel = Channel<std::shared_ptr<Runner>>::create();
+            runnerSender = std::move(channel.first);
+            runnerReceiver = std::move(channel.second);
         }
     };
 
@@ -61,7 +52,7 @@ namespace MultiGenerator::Executor {
          */
         void start(ThreadPoolStatus &status) {
             handle = std::thread([&, this]() {
-                ++status.runningWorkerCount;
+                status.runningWorkerCount.fetch_add(1, std::memory_order_relaxed);
 
                 while (true) {
                     /** Get a runner from the queue or quit if it's empty. */
@@ -73,7 +64,7 @@ namespace MultiGenerator::Executor {
                         break;
                 }
 
-                --status.runningWorkerCount;
+                status.runningWorkerCount.fetch_sub(1, std::memory_order_relaxed);
             });
         }
 
@@ -90,21 +81,8 @@ namespace MultiGenerator::Executor {
         std::thread handle;
 
         std::shared_ptr<Runner> getRunner(ThreadPoolStatus &status) {
-            std::shared_ptr<Runner> runner;
-            std::unique_lock lock(status.poolLock);
-            /** Sleep until receiving a new task or a stop singal. */
-            if (status.runnerQueue.empty() && !status.isStopped) {
-                status.condVar.wait(lock, [&]() {
-                    return (!status.runnerQueue.empty() || status.isStopped);
-                });
-            }
-            /** Check the queue first to ensure finishing remain tasks before quitting. */
-            if (!status.runnerQueue.empty()) {
-                runner = std::move(status.runnerQueue.front());
-                status.runnerQueue.pop();
-            }
-
-            return runner;
+            auto runner = status.runnerReceiver.receive();
+            return runner.value_or(std::shared_ptr<Runner>());
         }
     };
 
@@ -145,7 +123,7 @@ namespace MultiGenerator::Executor {
 
     /**
      * @brief A class which manages the workers and posts runners.
-     * 
+     *
      */
     class ThreadPool {
     public:
@@ -177,7 +155,7 @@ namespace MultiGenerator::Executor {
         ThreadPool &operator=(ThreadPool &&rhs) = default;
 
         ~ThreadPool() {
-            if (!status->isStopped)
+            if (!isStopped)
                 stop();
         }
 
@@ -192,17 +170,18 @@ namespace MultiGenerator::Executor {
             if (maxWorkerCount <= 0)
                 throw MaxThreadCountInvalidException();
 
-            if (!status->isStopped)
+            if (!isStopped)
                 throw ThreadPoolAlreadyStartedException();
 
-            status->setMaxWorkerCount(maxWorkerCount);
+            setMaxWorkerCount(maxWorkerCount);
             workers.resize(static_cast<std::vector<Runner>::size_type>(maxWorkerCount));
 
             for (auto &worker : workers)
                 worker.start(*status);
 
             /** Return before all workers finish initializing. */
-            while (status->runningWorkerCount != status->maxWorkerCount) {}
+            while (status->runningWorkerCount != maxWorkerCount)
+                std::this_thread::sleep_for(std::chrono::nanoseconds(100));
         }
 
         /**
@@ -211,12 +190,14 @@ namespace MultiGenerator::Executor {
          *
          */
         void stop() {
-            if (status->isStopped)
+            if (isStopped)
                 throw ThreadPoolAlreadyStoppedException();
 
-            status->setMaxWorkerCount(0);
-            /** Wake up all sleeping workers to quit first. */
-            status->condVar.notify_all();
+            for (int i = 0; i < maxWorkerCount; ++i)
+                status->runnerSender.send(std::shared_ptr<Runner>());
+
+            setMaxWorkerCount(0);
+
             /** Ensure that all workers stop first. */
             for (auto &worker : workers)
                 worker.stop();
@@ -224,7 +205,7 @@ namespace MultiGenerator::Executor {
 
         /**
          * @brief Construct a runner and put it into the queue directly.
-         * 
+         *
          * @tparam RunnerDerived the runner derived from Runner
          * @tparam Args the type of arguments passed to the constructor of RunnerDerived
          * @param args the arguments passed to the constructor of RunnerDerived
@@ -248,20 +229,23 @@ namespace MultiGenerator::Executor {
          * @param runner the runner handle
          */
         void execute(std::shared_ptr<Runner> runner) {
-            if (status->isStopped)
+            if (isStopped)
                 throw ThreadPoolIsNotRunningException();
 
             if (!runner)
                 throw RunnerHandleInvalidException();
 
-            std::unique_lock<std::mutex> lock(status->poolLock);
-            status->runnerQueue.push(std::move(runner));
-            lock.unlock();
-            /** Try to wake up a slleeping worker to handle this runner. */
-            status->condVar.notify_one();
+            status->runnerSender.send(std::move(runner));
         }
     private:
+        int maxWorkerCount;
+        bool isStopped;
         std::unique_ptr<ThreadPoolStatus> status;
         std::vector<Worker> workers;
+
+        void setMaxWorkerCount(int count) {
+            maxWorkerCount = count;
+            isStopped = (count == 0);
+        }
     };
 } // namespace MultiGenerator::Executor
