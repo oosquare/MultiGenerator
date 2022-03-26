@@ -105,6 +105,10 @@ namespace MultiGenerator::Variable {
             else
                 return it->second;
         }
+
+        static DataConfig create(const std::unordered_map<std::string, std::string> &config) {
+            return DataConfig(config);
+        }
     private:
         std::unordered_map<std::string, std::string> config;
     };
