@@ -16,8 +16,6 @@
 #include <MultiGenerator/Variable/Argument.hpp>
 
 namespace MultiGenerator::Workflow {
-    using Variable::Argument;
-
     /**
      * @brief A abstract base class of all task classes.
      * 
@@ -29,10 +27,10 @@ namespace MultiGenerator::Workflow {
 
         ~Task() {}
 
-        void setArgument(std::shared_ptr<Argument> arg) {
+        void setArgument(std::shared_ptr<Variable::Argument> arg) {
             this->arg = std::move(arg);
         }
     protected:
-        std::shared_ptr<Argument> arg;
+        std::shared_ptr<Variable::Argument> arg;
     };
 } // namespace MultiGenerator::Workflow

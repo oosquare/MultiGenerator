@@ -402,5 +402,12 @@ namespace MultiGenerator::Executor {
             ChanSender sender(receiver);
             return std::make_pair(std::move(sender), std::move(receiver));
         }
+
+        static ChanSender open(ChanReceiver &receiver) {
+            if (auto handle = receiver.getHandle(); !handle)
+                receiver = ChanReceiver(std::make_shared<ChannelData>());
+
+            return ChanSender(receiver);
+        }
     };
 } // namespace MultiGenerator::Executor

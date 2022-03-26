@@ -19,8 +19,6 @@
 #include <MultiGenerator/Executor/Channel.hpp>
 
 namespace MultiGenerator::Executor {
-    using MultiGenerator::Workflow::Runner;
-
     /**
      * @brief A struct which stores the status and all pending runners
      * of a thread pool.
@@ -28,12 +26,12 @@ namespace MultiGenerator::Executor {
      */
     struct ThreadPoolStatus {
         std::atomic_int runningWorkerCount;
-        Sender<std::shared_ptr<Runner>> runnerSender;
-        Receiver<std::shared_ptr<Runner>> runnerReceiver;
+        Sender<std::shared_ptr<Workflow::Runner>> runnerSender;
+        Receiver<std::shared_ptr<Workflow::Runner>> runnerReceiver;
 
         ThreadPoolStatus() :
             runningWorkerCount(0) {
-            auto channel = Channel<std::shared_ptr<Runner>>::create();
+            auto channel = Channel<std::shared_ptr<Workflow::Runner>>::create();
             runnerSender = std::move(channel.first);
             runnerReceiver = std::move(channel.second);
         }
@@ -80,9 +78,9 @@ namespace MultiGenerator::Executor {
     private:
         std::thread handle;
 
-        std::shared_ptr<Runner> getRunner(ThreadPoolStatus &status) {
+        std::shared_ptr<Workflow::Runner> getRunner(ThreadPoolStatus &status) {
             auto runner = status.runnerReceiver.receive();
-            return runner.value_or(std::shared_ptr<Runner>());
+            return runner.value_or(std::shared_ptr<Workflow::Runner>());
         }
     };
 
@@ -174,7 +172,7 @@ namespace MultiGenerator::Executor {
                 throw ThreadPoolAlreadyStartedException();
 
             setMaxWorkerCount(maxWorkerCount);
-            workers.resize(static_cast<std::vector<Runner>::size_type>(maxWorkerCount));
+            workers.resize(static_cast<std::vector<Workflow::Runner>::size_type>(maxWorkerCount));
 
             for (auto &worker : workers)
                 worker.start(*status);
@@ -194,7 +192,7 @@ namespace MultiGenerator::Executor {
                 throw ThreadPoolAlreadyStoppedException();
 
             for (int i = 0; i < maxWorkerCount; ++i)
-                status->runnerSender.send(std::shared_ptr<Runner>());
+                status->runnerSender.send(std::shared_ptr<Workflow::Runner>());
 
             setMaxWorkerCount(0);
 
@@ -212,7 +210,7 @@ namespace MultiGenerator::Executor {
          * @return a handle of the runner which is able to get some essential inforamation
          */
         template <typename RunnerDerived, typename ...Args>
-        std::shared_ptr<Runner> execute(Args &&...args) {
+        std::shared_ptr<Workflow::Runner> execute(Args &&...args) {
             /** RunnerDerived must implement Runner . */
             static_assert(std::is_base_of_v<Runner, RunnerDerived>,
                 "RunnerDerived must be a derived class of Runner.");
@@ -228,7 +226,7 @@ namespace MultiGenerator::Executor {
          *
          * @param runner the runner handle
          */
-        void execute(std::shared_ptr<Runner> runner) {
+        void execute(std::shared_ptr<Workflow::Runner> runner) {
             if (isStopped)
                 throw ThreadPoolIsNotRunningException();
 
