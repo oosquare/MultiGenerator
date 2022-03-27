@@ -44,6 +44,10 @@ namespace MultiGenerator::Workflow {
             entry(),
             arg(std::move(arg)) {}
 
+        TaskGroup(const TaskGroup &) = default;
+
+        TaskGroup &operator=(const TaskGroup &) = default;
+
         TaskGroup(TaskGroup &&) = default;
 
         TaskGroup &operator=(TaskGroup &&) = default;
@@ -58,12 +62,14 @@ namespace MultiGenerator::Workflow {
          */
         int add(std::function<std::unique_ptr<Task>()> constructor) {
             int id = static_cast<int>(entry.size());
-            
-            entry.emplace_back(id, std::bind([this](const auto &cont) {
+
+            auto cont = [](const auto &cont, std::shared_ptr<Variable::Argument> arg) {
                 auto task = cont();
                 task->setArgument(arg);
                 return task;
-            }, std::move(constructor)));
+            };
+            
+            entry.emplace_back(id, std::bind(cont, std::move(constructor), arg));
             
             return id;
         }
@@ -74,14 +80,14 @@ namespace MultiGenerator::Workflow {
          *
          * @return the next task or std::nullopt
          */
-        std::optional<TaskEntry> next() {
+        std::optional<TaskEntry> next() const {
             if (current == static_cast<int>(entry.size()))
                 return std::nullopt;
 
             return entry[current++];
         }
     private:
-        int current;
+        mutable int current;
         std::vector<TaskEntry> entry;
         std::shared_ptr<Variable::Argument> arg;
     };

@@ -263,7 +263,8 @@ namespace MultiGenerator::Executor {
     template <typename Element>
     class Sender {
     public:
-        Sender() {}
+        Sender() :
+            channel() {}
 
         Sender(std::weak_ptr<ChannelData<Element>> handle) :
             channel() {
@@ -404,8 +405,8 @@ namespace MultiGenerator::Executor {
         }
 
         static ChanSender open(ChanReceiver &receiver) {
-            if (auto handle = receiver.getHandle(); !handle)
-                receiver = ChanReceiver(std::make_shared<ChannelData>());
+            if (auto handle = receiver.getHandle(); handle.expired())
+                receiver = ChanReceiver(std::make_shared<ChannelData<Element>>());
 
             return ChanSender(receiver);
         }

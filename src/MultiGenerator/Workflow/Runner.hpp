@@ -79,7 +79,9 @@ namespace MultiGenerator::Workflow {
          *
          * @param constructor the constructor of a callable object.
          */
-        LazyInitRunner(std::function<std::unique_ptr<Callable>()> constructor) {}
+        LazyInitRunner(std::function<std::unique_ptr<Callable>()> constructor) :
+            constructor(std::move(constructor)),
+            callable() {}
 
         ~LazyInitRunner() {}
 
