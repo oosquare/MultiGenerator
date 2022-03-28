@@ -4,7 +4,7 @@
 #include <MultiGenerator/Context/Stream.hpp>
 #include <MultiGenerator/Context/Environment.hpp>
 
-namespace Context = MulitGenerator::Context;
+namespace Context = MultiGenerator::Context;
 
 void testEnvironment() {
     using Context::Environment;

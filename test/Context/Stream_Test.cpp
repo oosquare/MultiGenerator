@@ -6,7 +6,7 @@
 
 #include <MultiGenerator/Context/Stream.hpp>
 
-namespace Context = MulitGenerator::Context;
+namespace Context = MultiGenerator::Context;
 
 void testStandardInputStream() {
     using Context::StandardInputStream;

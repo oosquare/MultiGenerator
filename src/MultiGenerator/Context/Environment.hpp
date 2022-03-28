@@ -17,7 +17,7 @@
 
 #include <MultiGenerator/Context/Stream.hpp>
 
-namespace MulitGenerator::Context {
+namespace MultiGenerator::Context {
     class StreamNotOpenException : public std::exception {
     public:
         const char *what() const noexcept override {
@@ -69,4 +69,4 @@ namespace MulitGenerator::Context {
         std::unique_ptr<InputStream> is;
         std::unique_ptr<OutputStream> os;
     };
-} // namespace MulitGenerator::Context
+} // namespace MultiGenerator::Context

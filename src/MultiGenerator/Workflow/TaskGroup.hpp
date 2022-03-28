@@ -1,5 +1,5 @@
 /**
- * @file TaskGroup.hpp
+ * @file MultiGenerator/Workflow/TaskGroup.hpp
  * @author Justin Chen (ctj12461@163.com)
  * @brief A class which stores a group of tasks.
  * @version 0.1

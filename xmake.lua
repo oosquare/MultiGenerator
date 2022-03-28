@@ -14,7 +14,7 @@ target("MultiGenerator")
 
 target("MultiGeneratorTest")
     set_kind("binary")
-    add_files("test/Executor/TaskExecutor_Test.cpp")
+    add_files("test/Interface/Component_Test.cpp")
     add_includedirs("src")
     add_deps("MultiGenerator")
 

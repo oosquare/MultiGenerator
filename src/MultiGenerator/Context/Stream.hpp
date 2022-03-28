@@ -16,13 +16,11 @@
 #include <string>
 #include <exception>
 
-namespace MulitGenerator::Context {
+namespace MultiGenerator::Context {
     class FileOpenFailedException : std::exception {
     public:
-        FileOpenFailedException(const std::string &fileName) {
-            msg = "FileOpenFailedException: Failed to open file: ";
-            msg += fileName;
-        }
+        FileOpenFailedException(const std::string &fileName) :
+            msg("FileOpenFailedException: Failed to open file: " + fileName) {}
         
         const char *what() const noexcept override {
             return msg.c_str();
@@ -59,7 +57,8 @@ namespace MulitGenerator::Context {
     class FileInputStream : public InputStream {
     public:
         FileInputStream(const std::string &fileName) :
-            fileName(fileName) {}
+            fileName(fileName),
+            ifs() {}
 
         ~FileInputStream() {}
 
@@ -105,7 +104,8 @@ namespace MulitGenerator::Context {
     class FileOutputStream : public OutputStream {
     public:
         FileOutputStream(const std::string &fileName) :
-            fileName(fileName) {}
+            fileName(fileName),
+            ofs() {}
 
         ~FileOutputStream() {}
 
@@ -122,4 +122,4 @@ namespace MulitGenerator::Context {
         std::string fileName;
         std::ofstream ofs;
     };
-} // namespace MulitGenerator::Context
+} // namespace MultiGenerator::Context
