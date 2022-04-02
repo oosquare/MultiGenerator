@@ -1,5 +1,5 @@
 /**
- * @file Template.hpp
+ * @file MultiGenerator/Interface/Template.hpp
  * @author Justin Chen (ctj12461@163.com)
  * @brief Some generator templates.
  * @version 0.1

@@ -9,14 +9,54 @@ end
 
 target("MultiGenerator")
     set_kind("headeronly")
+    set_default(true)
     add_headerfiles("src/MultiGenerator.hpp")
-    add_headerfiles("src/MultiGenerator/*.hpp")
+    add_headerfiles("src/MultiGenerator")
+
+    on_install(function (target)
+        if is_plat("linux") then
+            os.cp("$(projectdir)/src/*", "/usr/local/include/")
+        else
+            print("===================== WARNING =====================")
+            print("Please copy all files in src/ to your include path.")
+        end
+    end)
+
+    on_uninstall(function (target)
+        if is_plat("linux") then
+            os.rm("/usr/local/include/MultiGenerator/")
+            os.rm("/usr/local/include/MultiGenerator.hpp")
+        else
+            print("===================== WARNING =====================")
+            print("Please remove all files in src/ to your include path.")
+        end
+    end)
 
 target("MultiGeneratorTest")
     set_kind("binary")
-    add_files("test/Interface/Component_Test.cpp")
+    set_default(false)
+    add_files("test/Executor/TaskExecutor_Test.cpp")
     add_includedirs("src")
     add_deps("MultiGenerator")
+
+    on_install(function (target)
+    end)
+
+    on_uninstall(function (target)
+    end)
+
+target("MultiGeneratorDemo")
+    set_kind("binary")
+    set_default(true)
+    add_files("example/ShortestPath.cpp")
+    add_includedirs("src")
+    add_deps("MultiGenerator")
+
+    on_install(function (target)
+    end)
+
+    on_uninstall(function (target)
+    end)
 
 --
 -- If you want to known more usage about xmake, please see https://xmake.io

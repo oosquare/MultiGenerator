@@ -22,6 +22,7 @@
 #include <MultiGenerator/Interface/Template.hpp>
 
 namespace MultiGenerator {
+    /** Reexport some essential classes and functions */
     using Variable::DataConfig;
     using namespace Interface;
 } // namespace MultiGenerator
