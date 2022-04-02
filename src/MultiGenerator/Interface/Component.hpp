@@ -34,11 +34,9 @@ namespace MultiGenerator::Interface {
             this->problemName = problemName;
         }
 
-        void initEnvironment() {
-            inputFile = std::make_unique<Context::Environment>(
-                std::unique_ptr<Context::InputStream>(),
-                std::make_unique<Context::FileOutputStream>(problemName + arg->getID() + ".in")
-            );
+        void setArgument(std::shared_ptr<Variable::Argument> arg) override {
+            Workflow::Task::setArgument(std::move(arg));
+            initEnvironment();
         }
 
         void call() override {
@@ -56,6 +54,13 @@ namespace MultiGenerator::Interface {
     private:
         std::string problemName;
         std::unique_ptr<Context::Environment> inputFile;
+
+        void initEnvironment() {
+            inputFile = std::make_unique<Context::Environment>(
+                std::unique_ptr<Context::InputStream>(),
+                std::make_unique<Context::FileOutputStream>(problemName + arg->getID() + ".in")
+            );
+        }
     };
 
     /**
@@ -75,11 +80,9 @@ namespace MultiGenerator::Interface {
             this->problemName = problemName;
         }
 
-        void initEnvironment() {
-            file = std::make_unique<Context::Environment>(
-                std::make_unique<Context::FileInputStream>(problemName + arg->getID() + ".in"),
-                std::make_unique<Context::FileOutputStream>(problemName + arg->getID() + ".out")
-            );
+        void setArgument(std::shared_ptr<Variable::Argument> arg) override {
+            Workflow::Task::setArgument(std::move(arg));
+            initEnvironment();
         }
 
         void call() override {
@@ -100,6 +103,13 @@ namespace MultiGenerator::Interface {
     private:
         std::string problemName;
         std::unique_ptr<Context::Environment> file;
+
+        void initEnvironment() {
+            file = std::make_unique<Context::Environment>(
+                std::make_unique<Context::FileInputStream>(problemName + arg->getID() + ".in"),
+                std::make_unique<Context::FileOutputStream>(problemName + arg->getID() + ".out")
+            );
+        }
     };
 
     /**
@@ -121,15 +131,9 @@ namespace MultiGenerator::Interface {
             this->problemName = problemName;
         }
 
-        void initEnvironment() {
-            inputFile = std::make_unique<Context::Environment>(
-                std::unique_ptr<Context::InputStream>(),
-                std::make_unique<Context::FileOutputStream>(problemName + arg->getID() + ".in")
-            );
-            outputFile = std::make_unique<Context::Environment>(
-                std::unique_ptr<Context::InputStream>(),
-                std::make_unique<Context::FileOutputStream>(problemName + arg->getID() + ".out")
-            );
+        void setArgument(std::shared_ptr<Variable::Argument> arg) override {
+            Workflow::Task::setArgument(std::move(arg));
+            initEnvironment();
         }
 
         void call() override {
@@ -152,5 +156,16 @@ namespace MultiGenerator::Interface {
         std::string problemName;
         std::unique_ptr<Context::Environment> inputFile;
         std::unique_ptr<Context::Environment> outputFile;
+
+        void initEnvironment() {
+            inputFile = std::make_unique<Context::Environment>(
+                std::unique_ptr<Context::InputStream>(),
+                std::make_unique<Context::FileOutputStream>(problemName + arg->getID() + ".in")
+            );
+            outputFile = std::make_unique<Context::Environment>(
+                std::unique_ptr<Context::InputStream>(),
+                std::make_unique<Context::FileOutputStream>(problemName + arg->getID() + ".out")
+            );
+        }
     };
 } // namespace MultiGenerator::Interface

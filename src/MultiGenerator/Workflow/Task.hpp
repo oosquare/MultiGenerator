@@ -27,7 +27,7 @@ namespace MultiGenerator::Workflow {
 
         ~Task() {}
 
-        void setArgument(std::shared_ptr<Variable::Argument> arg) {
+        virtual void setArgument(std::shared_ptr<Variable::Argument> arg) {
             this->arg = std::move(arg);
         }
     protected:
