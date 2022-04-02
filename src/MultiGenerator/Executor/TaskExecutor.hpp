@@ -61,11 +61,11 @@ namespace MultiGenerator::Executor {
                 if (!task.has_value())
                     continue;
 
-                auto lambda = [id, &taskReceiver](auto cont) {
+                auto sender = std::make_shared<Sender<int>>(Channel<int>::open(taskReceiver));
+                auto lambda = [id, sender](auto cont) mutable {
                     /** Notify this executor to get the next task of groups[id] */
-                    auto notify = [id, &taskReceiver]() {
-                        auto sender = Channel<int>::open(taskReceiver);
-                        sender.send(id);
+                    auto notify = [id, sender]() mutable {
+                        sender->send(id);
                     };
 
                     std::unique_ptr<Workflow::Callable> callable = cont();

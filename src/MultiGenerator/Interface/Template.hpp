@@ -53,13 +53,13 @@ namespace MultiGenerator::Interface {
             static_assert(std::is_base_of_v<SolutionTask, Solution>,
                 "Solution must be a derived class of SolutionTask");
 
-            Workflow::TaskGroup group;
-            group.add([arg, problemName]() -> std::unique_ptr<Workflow::Task> {
+            Workflow::TaskGroup group(arg);
+            group.add([arg, problemName = this->problemName]() -> std::unique_ptr<Workflow::Task> {
                 auto ptr = std::make_unique<Generator>();
                 ptr->setProblemName(problemName);
                 return ptr;
             });
-            group.add([arg, problemName]() -> std::unique_ptr<Workflow::Task> {
+            group.add([arg, problemName = this->problemName]() -> std::unique_ptr<Workflow::Task> {
                 auto ptr = std::make_unique<Solution>();
                 ptr->setProblemName(problemName);
                 return ptr;
@@ -78,8 +78,8 @@ namespace MultiGenerator::Interface {
             static_assert(std::is_base_of_v<IntegratedGeneratingTask, IntegratedGenerator>,
                 "IntegratedGenerator must be a derived class of IntegratedGeneratingTask");
 
-            Workflow::TaskGroup group;
-            group.add([arg, problemName]() -> std::unique_ptr<Workflow::Task> {
+            Workflow::TaskGroup group(arg);
+            group.add([arg, problemName = this->problemName]() -> std::unique_ptr<Workflow::Task> {
                 auto ptr = std::make_unique<IntegratedGeneratingTask>();
                 ptr->setProblemName(problemName);
                 return ptr;

@@ -25,8 +25,15 @@ private:
     Executor::Sender<int> sender;
 };
 
+class TestTask2 : public Workflow::Task {
+public:
+    void call() override {
+        std::cout << "TestTask2\n";
+    }
+};
+
 void testTaskExecutor() {
-    constexpr int GROUP_COUNT = 1000;
+    constexpr int GROUP_COUNT = 1;
 
     Executor::TaskExecutor executor;
     std::vector<Workflow::TaskGroup> groups;
@@ -42,6 +49,10 @@ void testTaskExecutor() {
 
         group.add([&receiver]() {
             return std::make_unique<TestTask>(Executor::Channel<int>::open(receiver));
+        });
+
+        group.add([]() {
+            return std::make_unique<TestTask2>();
         });
 
         groups.push_back(std::move(group));

@@ -20,3 +20,8 @@
 #include <MultiGenerator/Interface/Component.hpp>
 #include <MultiGenerator/Interface/Utility.hpp>
 #include <MultiGenerator/Interface/Template.hpp>
+
+namespace MultiGenerator {
+    using Variable::DataConfig;
+    using namespace Interface;
+} // namespace MultiGenerator

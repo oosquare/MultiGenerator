@@ -25,7 +25,7 @@ namespace MultiGenerator::Interface {
      */
     template <typename Value>
     inline std::pair<std::string, std::string> entry(const std::string &key, const Value &value) {
-        return { key, std::string(value) };
+        return { key, std::to_string(value) };
     }
 
     /**
