@@ -42,10 +42,10 @@ private:
         }
         
         /** Generate the last maxEdgeCount - (vertixCount - 1) edges. */
-        for (int i = 1; i <= maxEdgeCount - (vertixCount + 1); ++i) {
+        for (int i = 1; i <= maxEdgeCount - (vertixCount - 1); ++i) {
             data << getInt(gen, 1, vertixCount) << " ";
             data << getInt(gen, 1, vertixCount) << " ";
-            data << getInt(gen, 1, vertixCount) << std::endl;
+            data << getInt(gen, 1, maxWeight) << std::endl;
         }
     }
 
